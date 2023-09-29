@@ -1,123 +1,122 @@
 #include <iostream>
-#include <string>
 #include <vector>
 #include <map>
+#include <string>
 
 using namespace std;
 
-// Estrutura para armazenar informações de uma passagem
 struct Passagem {
     int numeroAssento;
     string dataHora;
-    string cpf;
+    string CPF;
     string nome;
     int idade;
-    double valor;
+    double preco;
+};
+
+struct Viagem {
+    string horario;
+    vector<Passagem> passagens;
 };
 
 // Função para calcular o total arrecadado para uma determinada viagem
-double calcularTotalArrecadadoViagem(const vector<Passagem>& passagens) {
-    double totalArrecadado = 0.0;
-    for (const Passagem& passagem : passagens) {
-        totalArrecadado += passagem.valor;
+double calcularTotalArrecadado(const Viagem& viagem) {
+    double total = 0;
+    for (const Passagem& passagem : viagem.passagens) {
+        total += passagem.preco;
     }
-    return totalArrecadado;
+    return total;
 }
 
 // Função para calcular o total arrecadado em um determinado mês
-double calcularTotalArrecadadoMes(const vector<Passagem>& passagens, int mes) {
-    double totalArrecadado = 0.0;
-    for (const Passagem& passagem : passagens) {
-        // Exemplo de formato de data/hora: "2023-09-28 14:30"
-        int mesDaPassagem = stoi(passagem.dataHora.substr(5, 2));
-        if (mesDaPassagem == mes) {
-            totalArrecadado += passagem.valor;
+double calcularTotalArrecadadoNoMes(const vector<Viagem>& viagens, const string& mes) {
+    double total = 0;
+    for (const Viagem& viagem : viagens) {
+        if (viagem.horario.substr(5, 2) == mes) {
+            total += calcularTotalArrecadado(viagem);
         }
     }
-    return totalArrecadado;
+    return total;
 }
 
-// Função para obter o nome do passageiro de uma determinada poltrona P de uma determinada viagem
-string obterNomePassageiroPorPoltrona(const vector<Passagem>& passagens, int poltrona) {
-    for (const Passagem& passagem : passagens) {
-        if (passagem.numeroAssento == poltrona) {
-            return passagem.nome;
-        }
-    }
-    return "Poltrona vazia";
-}
-
-// Função para calcular o horário de viagem mais rentável
-string calcularHorarioMaisRentavel(const vector<Passagem>& passagens) {
-    map<string, double> horariosArrecadacao;
-
-    for (const Passagem& passagem : passagens) {
-        string horario = passagem.dataHora.substr(11, 5); // Extrai a hora e minuto do formato "2023-09-28 14:30"
-        horariosArrecadacao[horario] += passagem.valor;
+// Função para encontrar o horário de viagem mais rentável
+string encontrarHorarioMaisRentavel(const vector<Viagem>& viagens) {
+    map<string, double> horarios; // Mapa para armazenar horários e seus totais arrecadados
+    for (const Viagem& viagem : viagens) {
+        double total = calcularTotalArrecadado(viagem);
+        horarios[viagem.horario] += total;
     }
 
     string horarioMaisRentavel;
-    double maiorArrecadacao = 0.0;
-
-    for (const auto& par : horariosArrecadacao) {
-        if (par.second > maiorArrecadacao) {
+    double maxTotal = 0;
+    for (const auto& par : horarios) {
+        if (par.second > maxTotal) {
+            maxTotal = par.second;
             horarioMaisRentavel = par.first;
-            maiorArrecadacao = par.second;
         }
     }
-
     return horarioMaisRentavel;
 }
 
 // Função para calcular a média de idade dos passageiros
-double calcularMediaIdadePassageiros(const vector<Passagem>& passagens) {
-    int totalPassageiros = passagens.size();
-    int somaIdades = 0;
-
-    for (const Passagem& passagem : passagens) {
-        somaIdades += passagem.idade;
+double calcularMediaIdade(const vector<Viagem>& viagens) {
+    int totalIdade = 0;
+    int totalPassageiros = 0;
+    for (const Viagem& viagem : viagens) {
+        for (const Passagem& passagem : viagem.passagens) {
+            totalIdade += passagem.idade;
+            totalPassageiros++;
+        }
     }
-
     if (totalPassageiros > 0) {
-        return static_cast<double>(somaIdades) / totalPassageiros;
+        return static_cast<double>(totalIdade) / totalPassageiros;
     } else {
-        return 0.0;
+        return 0;
     }
 }
 
+// Função para localizar o passageiro pela poltrona e hora da viagem
+string localizarPassageiro(const vector<Viagem>& viagens, int numeroAssento, const string& horaViagem) {
+    for (const Viagem& viagem : viagens) {
+        if (viagem.horario == horaViagem) {
+            for (const Passagem& passagem : viagem.passagens) {
+                if (passagem.numeroAssento == numeroAssento) {
+                    return passagem.nome;
+                }
+            }
+        }
+    }
+    return "Passageiro não encontrado";
+}
+
 int main() {
-    vector<Passagem> passagens;
-    
-    // Exemplo de como adicionar uma passagem
-    Passagem passagem1;
-    passagem1.numeroAssento = 1;
-    passagem1.dataHora = "2023-09-28 14:30";
-    passagem1.cpf = "12345678900";
-    passagem1.nome = "João";
-    passagem1.idade = 30;
-    passagem1.valor = 80.0;
-    passagens.push_back(passagem1);
+    vector<Viagem> viagens;
 
-    // Exemplo de como calcular o total arrecadado para uma determinada viagem
-    double totalViagem1 = calcularTotalArrecadadoViagem(passagens);
-    cout << "Total arrecadado para a viagem 1: R$" << totalViagem1 << endl;
+    // Exemplo de entrada de dados (pode ser adaptado para um loop)
+    Viagem viagem1;
+    viagem1.horario = "2023-09-28 10:00";
+    for (int i = 1; i <= 40; i++) {
+        Passagem passagem;
+        passagem.numeroAssento = i;
+        passagem.dataHora = "2023-09-28 10:00";
+        passagem.CPF = "123.456.789-00";
+        passagem.nome = "Passageiro " + to_string(i);
+        passagem.idade = 25 + i;
+        passagem.preco = 80.0;
+        viagem1.passagens.push_back(passagem);
+    }
+    viagens.push_back(viagem1);
 
-    // Exemplo de como calcular o total arrecadado em um determinado mês (setembro = 9)
-    double totalSetembro = calcularTotalArrecadadoMes(passagens, 9);
-    cout << "Total arrecadado em setembro: R$" << totalSetembro << endl;
+    // Exemplo de consulta de informações
+    cout << "Total arrecadado para a viagem: " << calcularTotalArrecadado(viagem1) << " reais" << endl;
+    cout << "Total arrecadado em setembro: " << calcularTotalArrecadadoNoMes(viagens, "09") << " reais" << endl;
+    cout << "Horário de viagem mais rentável: " << encontrarHorarioMaisRentavel(viagens) << endl;
+    cout << "Média de idade dos passageiros: " << calcularMediaIdade(viagens) << " anos" << endl;
 
-    // Exemplo de como obter o nome do passageiro de uma determinada poltrona
-    int poltrona = 1;
-    string nomePassageiro = obterNomePassageiroPorPoltrona(passagens, poltrona);
-    cout << "Nome do passageiro da poltrona " << poltrona << ": " << nomePassageiro << endl;
-
-    // Exemplo de como calcular o horário de viagem mais rentável
-    string horarioMaisRentavel = calcularHorarioMaisRentavel(passagens);
-    cout << "Horário de viagem mais rentável: " << horarioMaisRentavel << endl;
-
-    // Exemplo de como calcular a média de idade dos passageiros
-    double mediaIdade = calcularMediaIdadePassageiros(passagens);
-    cout << "Média de idade dos passageiros: " << mediaIdade << " anos" << endl;
+    // Exemplo de localização de passageiro por poltrona
+    int poltrona = 15;
+    string horaViagem = "2023-09-28 10:00";
+    cout << "Passageiro na poltrona " << poltrona << ": " << localizarPassageiro(viagens, poltrona, horaViagem) << endl;
 
     return 0;
 }

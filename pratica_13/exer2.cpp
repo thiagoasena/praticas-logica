@@ -3,8 +3,8 @@
 
 using namespace std;
 
-// Definição da estrutura empregado
-struct empregado {
+// Definindo a estrutura Empregado
+struct Empregado {
     string nome;
     string sobrenome;
     int anoNascimento;
@@ -13,37 +13,55 @@ struct empregado {
     double salario;
 };
 
-// Função para reajustar o salário de cada empregado em 10%
-void Reajusta_dez_porcento(empregado vetor[], int tamanho) {
-    for (int i = 0; i < tamanho; i++) {
-        vetor[i].salario *= 1.10; // Aumenta o salário em 10%
+// Função para reajustar o salário em 10%
+void Reajusta_dez_porcento(Empregado empregados[], int numEmpregados) {
+    for (int i = 0; i < numEmpregados; i++) {
+        empregados[i].salario *= 1.10; // Aumento de 10%
     }
 }
 
 int main() {
-    // Criação do vetor de empregados
-    empregado empregados[50];
+    // Definindo um vetor de empregados para armazenar até 50 empregados
+    Empregado empregados[50];
+    int numEmpregados;
 
-    // Preenchimento dos dados para alguns empregados (você pode adicionar mais)
-    empregados[0] = {"João", "Silva", 1985, "123456789", 2010, 3000.0};
-    empregados[1] = {"Maria", "Santos", 1990, "987654321", 2015, 2500.0};
-    empregados[2] = {"Pedro", "Ferreira", 1988, "567891234", 2008, 3500.0};
+    cout << "Quantos empregados deseja cadastrar? (até 50): ";
+    cin >> numEmpregados;
 
-    // Calcula o tamanho real do vetor de empregados
-    int tamanho = 3; // Neste exemplo, há 3 empregados, mas você pode ajustar conforme necessário
+    if (numEmpregados <= 0 || numEmpregados > 50) {
+        cout << "Número inválido de empregados. O programa será encerrado." << endl;
+        return 1;
+    }
 
-    // Chama a função para reajustar os salários em 10%
-    Reajusta_dez_porcento(empregados, tamanho);
+    // Entrada de dados
+    for (int i = 0; i < numEmpregados; i++) {
+        cout << "Empregado " << i + 1 << ":" << endl;
+        cout << "Nome: ";
+        cin >> empregados[i].nome;
+        cout << "Sobrenome: ";
+        cin >> empregados[i].sobrenome;
+        cout << "Ano de Nascimento: ";
+        cin >> empregados[i].anoNascimento;
+        cout << "RG: ";
+        cin >> empregados[i].RG;
+        cout << "Ano de Admissão: ";
+        cin >> empregados[i].anoAdmissao;
+        cout << "Salário: ";
+        cin >> empregados[i].salario;
+    }
 
-    // Exibe os dados atualizados dos empregados
-    cout << "Dados dos empregados após o reajuste de 10%:\n";
-    for (int i = 0; i < tamanho; i++) {
+    // Chamando a função para reajustar salários em 10%
+    Reajusta_dez_porcento(empregados, numEmpregados);
+
+    // Saída de dados
+    cout << "\nDados dos empregados após o reajuste de 10%:\n";
+    for (int i = 0; i < numEmpregados; i++) {
+        cout << "Empregado " << i + 1 << ":" << endl;
         cout << "Nome: " << empregados[i].nome << " " << empregados[i].sobrenome << endl;
         cout << "Ano de Nascimento: " << empregados[i].anoNascimento << endl;
         cout << "RG: " << empregados[i].RG << endl;
         cout << "Ano de Admissão: " << empregados[i].anoAdmissao << endl;
         cout << "Salário: " << empregados[i].salario << endl;
-        cout << endl;
     }
 
     return 0;
