@@ -19,6 +19,13 @@ Este repositório tem como objetivo documentar o aprendizado e a prática de alg
 * **exercícios:**
   * Soluções para os exercícios propostos nos módulos de programação.
 
+## Estrutura do Repositório
+O repositório está organizado da seguinte forma:
+
+- **Master:** Toda a parte prática e teórica estão concentradas nessa branch.
+
+
+
 
 
 
