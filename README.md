@@ -7,14 +7,15 @@ Este repositório tem como objetivo documentar o aprendizado e a prática de alg
 
 ## Conteúdo
 * **algoritmos:**
-  * Ordenação: bubble sort, insertion sort, merge sort, quick sort
-  * Busca: binary search, linear search
-  * Grafos: DFS, BFS, Dijkstra
+  * Ordenação: Ordenação por bolha, Ordenação por inserção, Ordenação por mesclagem, Ordenação rápida
+  * Busca: Busca binária, Busca linear
+ 
 * **estruturas_de_dados:**
   * Pilhas
   * Filas
-  * Listas ligadas
   * Árvores
+  * Listas
+ 
 * **exercícios:**
   * Soluções para os exercícios propostos nos módulos de programação.
 
